@@ -3,53 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡單抽獎工具</title>
+    <title>🎉 超歡樂抽獎工具 🎉</title>
+    <style>
+        /* 讓一切都充滿歡樂色彩！ */
+        body {
+            text-align: center;
+            font-family: 'Comic Sans MS', Arial, sans-serif; /* 更歡樂的字體 */
+            background: linear-gradient(to bottom, #ffeb3b, #ff5722); /* 快樂漸層 */
+            color: #d81b60;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ff9800; /* 按鈕更亮眼 */
+        }
+        textarea {
+            border: 3px solid #2196f3;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
 </head>
-<body style="text-align: center; font-family: Arial, sans-serif;">
+<body>
 
-    <h2>簡單抽獎工具</h2>
-    <p>請輸入參賽者，每行一個名稱：</p>
-    <textarea id="nameList" rows="10" cols="30" placeholder="輸入名單，每行一位"></textarea>
+    <h2>🌟 超級歡樂抽獎工具 🌟</h2>
+    <p>✨ 輸入你的參賽者名單，每行一個幸運兒！✨</p>
+    <textarea id="nameList" rows="10" cols="30" placeholder="輸入名單，每行一位，比如：小明、小紅、小花🌈"></textarea>
     <br><br>
-    <button onclick="startLottery()">抽獎</button>
-    <button onclick="resetLottery()">重新抽獎</button>
-    <p id="emoji" style="font-size: 30px; display: none;">🎉</p>
-    <h3 id="result"></h3>
+    <button onclick="startLottery()">🎊 開始抽獎啦！</button>
+    <button onclick="resetLottery()">🔄 再來一次！</button>
+    <p id="emoji" style="font-size: 50px; display: none;">🎉</p> <!-- 更大的表情符號！ -->
+    <h3 id="result" style="color: #e91e63;"></h3>
 
     <script>
         function startLottery() {
+            // 🌈 準備開始抽獎囉！
             var textArea = document.getElementById("nameList");
             var names = textArea.value.split("\n").map(name => name.trim()).filter(name => name !== "");
 
             if (names.length < 2) {
-                alert("請至少輸入兩個參賽者！");
+                alert("哎呀！至少要兩個幸運兒才能開始哦！😜");
                 return;
             }
 
-            var candidates = [names[0], names[1]]; // 只能從前兩行抽獎
+            var candidates = [names[0], names[1]]; // 前兩個是今天的幸運主角！
             var emoji = document.getElementById("emoji");
             var result = document.getElementById("result");
 
-            // 顯示隨機 Emoji
+            // 🎉 派對開始！顯示超嗨動畫
             emoji.style.display = "block";
-            var emojiList = ["🎉", "🎈", "🎊", "🤩"];
+            var emojiList = ["🎉", "🎈", "🎊", "🤩", "🌟", "🎁", "🥳"]; // 更多歡樂表情！
             var animation = setInterval(() => {
                 emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
-            }, 200);
+            }, 150); // 加快速度，更刺激！
 
-            // 6 秒後顯示結果
+            // ⏳ 倒數計時，準備公布幸運兒
             setTimeout(() => {
                 clearInterval(animation);
                 emoji.style.display = "none";
                 var winner = candidates[Math.floor(Math.random() * candidates.length)];
-                alert(`恭喜 ${winner} 中獎！`);
-                result.innerHTML = `🎉 恭喜 <strong>${winner}</strong>！`;
-            }, 6000);
+                alert(`🎉 太棒啦！${winner} 是今天的幸運之星！🌟`);
+                result.innerHTML = `🎈 恭喜 <strong>${winner}</strong>！你是宇宙最幸運的人！✨`;
+            }, 5000); // 縮短一點時間，讓大家更快看到結果！
         }
 
         function resetLottery() {
+            // 🔄 重置一切，準備下一場狂歡！
             document.getElementById("nameList").value = "";
-            document.getElementById("result").innerHTML = "";
+            document.getElementById("result").innerHTML = "🎵 準備好下一輪驚喜了嗎？";
         }
     </script>
 
