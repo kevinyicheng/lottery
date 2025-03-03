@@ -71,7 +71,7 @@
 <body>
     <div class="container">
         <h1>🎉 TC813 平板摸彩 🎉</h1>
-        <p>✨ 每行輸入一個參賽者，只抽前二行喔！✨</p>
+        <p>✨ 每行輸入一個參賽者！✨</p>
         <textarea id="participants" placeholder="小明
 小紅
 小花"></textarea>
@@ -96,7 +96,7 @@
             participants = participants.slice(0, 2);
 
             if (participants.length === 0) {
-                result.innerHTML = "😅 前二行沒人，快來參加吧！";
+                result.innerHTML = "😅 快來參加吧！";
                 return;
             }
 
