@@ -3,117 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>抽獎工具</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #4facfe, #00f2fe);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        textarea {
-            width: 300px;
-            height: 150px;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 10px;
-            border: none;
-            outline: none;
-            font-size: 16px;
-            resize: none;
-        }
-
-        button {
-            background: #00c6ff;
-            border: none;
-            padding: 10px 20px;
-            font-size: 18px;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        button:hover {
-            background: #0072ff;
-        }
-
-        .result {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: white;
-            min-height: 50px;
-        }
-
-        .emoji {
-            font-size: 30px;
-            margin: 10px;
-            display: none;
-        }
-    </style>
+    <title>簡單抽獎工具</title>
 </head>
-<body>
+<body style="text-align: center; font-family: Arial, sans-serif;">
 
-    <div class="container">
-        <h2>抽獎工具</h2>
-        <p>請輸入最多 10 位參賽者，每行一個名稱：</p>
-        <textarea id="nameList" placeholder="輸入名單，每行一位"></textarea>
-        <br>
-        <button onclick="startLottery()">抽獎</button>
-        <button onclick="resetLottery()">重新抽獎</button>
-        <div class="emoji">🎉🎈🎊🤩</div>
-        <div class="result" id="result"></div>
-    </div>
+    <h2>簡單抽獎工具</h2>
+    <p>請輸入參賽者，每行一個名稱：</p>
+    <textarea id="nameList" rows="10" cols="30" placeholder="輸入名單，每行一位"></textarea>
+    <br><br>
+    <button onclick="startLottery()">抽獎</button>
+    <button onclick="resetLottery()">重新抽獎</button>
+    <p id="emoji" style="font-size: 30px; display: none;">🎉</p>
+    <h3 id="result"></h3>
 
     <script>
         function startLottery() {
-            const textArea = document.getElementById("nameList");
-            const names = textArea.value.split("\n").map(name => name.trim()).filter(name => name !== "");
-            
+            var textArea = document.getElementById("nameList");
+            var names = textArea.value.split("\n").map(name => name.trim()).filter(name => name !== "");
+
             if (names.length < 2) {
                 alert("請至少輸入兩個參賽者！");
                 return;
             }
-            
-            if (names.length > 10) {
-                alert("最多只能輸入 10 位參賽者！");
-                return;
-            }
 
-            // 只從前兩個名單中抽獎
-            const candidates = [names[0], names[1]];
-            const emojiDiv = document.querySelector(".emoji");
-            const resultDiv = document.getElementById("result");
+            var candidates = [names[0], names[1]]; // 只能從前兩行抽獎
+            var emoji = document.getElementById("emoji");
+            var result = document.getElementById("result");
 
-            // 開始動畫
-            emojiDiv.style.display = "block";
-            let emojiList = ["🎉", "🎈", "🎊", "🤩"];
-            let animationInterval = setInterval(() => {
-                emojiDiv.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
+            // 顯示隨機 Emoji
+            emoji.style.display = "block";
+            var emojiList = ["🎉", "🎈", "🎊", "🤩"];
+            var animation = setInterval(() => {
+                emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
             }, 200);
 
-            // 6 秒後停止動畫並顯示結果
+            // 6 秒後顯示結果
             setTimeout(() => {
-                clearInterval(animationInterval);
-                emojiDiv.style.display = "none";
-                const winner = candidates[Math.floor(Math.random() * candidates.length)];
+                clearInterval(animation);
+                emoji.style.display = "none";
+                var winner = candidates[Math.floor(Math.random() * candidates.length)];
                 alert(`恭喜 ${winner} 中獎！`);
-                resultDiv.innerHTML = `🎉 恭喜 <strong>${winner}</strong>！`;
+                result.innerHTML = `🎉 恭喜 <strong>${winner}</strong>！`;
             }, 6000);
         }
 
