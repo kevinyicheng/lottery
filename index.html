@@ -46,7 +46,7 @@
 </head>
 <body>
     <h1>🎉 TC813 平板大樂透 🎉</h1>
-    <p>✨ 每行輸入一個參賽者✨</p>
+    <p>✨ 每行輸入一個參賽！✨</p>
     <textarea id="participants" placeholder="小明
 小紅
 小花"></textarea>
@@ -82,4 +82,17 @@
                 countdown--;
                 if (countdown < 0) {
                     clearInterval(countdownInterval);
-                    // 隨機挑​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
+                    // 隨機挑選前二行中的幸運兒
+                    const winner = participants[Math.floor(Math.random() * participants.length)];
+                    result.innerHTML = `🎉 恭喜 <strong>${winner}</strong> 中獎啦！🥳`;
+                }
+            }, 1000); // 每秒更新一次
+        }
+
+        function reset() {
+            document.getElementById("participants").value = "";
+            document.getElementById("result").innerHTML = "🎁 誰會是下一個幸運兒？🎁";
+        }
+    </script>
+</body>
+</html>
