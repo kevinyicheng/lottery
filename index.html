@@ -3,139 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>簡單抽獎工具</title>
+    <title>🎲 歡樂抽獎機 🎲</title>
     <style>
-        /* 設定背景 */
         body {
-            background: rgba(200, 220, 255, 0.8); /* 淡藍色 + 透明度 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            font-family: Arial, sans-serif;
-        }
-
-        /* 毛玻璃效果的抽獎區塊 */
-        .container {
-            background: rgba(255, 255, 255, 0.6); /* 半透明白色 */
-            backdrop-filter: blur(10px); /* 毛玻璃模糊效果 */
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             text-align: center;
-            width: 350px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #e1bee7, #b2ebf2); /* 柔和歡樂漸層 */
+            padding: 20px;
         }
-
-        /* 大標題 */
-        h2 {
-            font-size: 24px;
+        h1 {
+            color: #7b1fa2;
+            font-size: 36px;
+            text-shadow: 2px 2px #f06292; /* 輕微陰影增加趣味 */
         }
-
-        /* 文字輸入框 */
         textarea {
-            width: 100%;
+            width: 300px;
             height: 150px;
-            font-size: 18px;
+            border: 2px dashed #ff5722;
+            border-radius: 8px;
             padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            resize: none;
+            font-size: 16px;
         }
-
-        /* 按鈕設計 */
         button {
-            font-size: 18px;
-            padding: 10px 20px;
-            margin: 10px;
+            background-color: #ff9800;
+            color: white;
+            padding: 12px 25px;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
+            font-size: 18px;
+            margin: 10px;
             cursor: pointer;
-            transition: 0.3s;
         }
-
-        /* 抽獎按鈕 */
-        .draw-btn {
-            background-color: #4CAF50; /* 綠色 */
-            color: white;
+        button:hover {
+            background-color: #f44336; /* 懸停時更有活力 */
         }
-        .draw-btn:hover {
-            background-color: #45a049;
-        }
-
-        /* 重置按鈕 */
-        .reset-btn {
-            background-color: #008CBA; /* 藍色 */
-            color: white;
-        }
-        .reset-btn:hover {
-            background-color: #0077A8;
-        }
-
-        /* 結果區塊 */
         #result {
-            font-size: 22px;
-            font-weight: bold;
-            margin-top: 15px;
-        }
-
-        /* Emoji 動畫 */
-        #emoji {
-            font-size: 40px;
-            display: none;
-            margin: 15px 0;
+            font-size: 24px;
+            color: #d81b60;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
-        <h2>簡單抽獎工具</h2>
-        <p>請輸入參賽者，每行一個名稱：</p>
-        <textarea id="nameList" placeholder="輸入名單，每行一位"></textarea>
-        <br>
-        <button class="draw-btn" onclick="startLottery()">抽獎</button>
-        <button class="reset-btn" onclick="resetLottery()">重新抽獎</button>
-        <p id="emoji">🎉</p>
-        <h3 id="result"></h3>
-    </div>
+    <h1>🎉 歡樂抽獎機 🎉</h1>
+    <p>✨ 每行輸入一個參賽者，準備開抽！✨</p>
+    <textarea id="participants" placeholder="小明&#10;小紅&#10;小花"></textarea>
+    <br>
+    <button onclick="drawWinner()">🎊 抽獎！</button>
+    <button onclick="reset()">🔄 重來一次</button>
+    <div id="result">🎁 誰會是幸運兒呢？🎁</div>
 
     <script>
-        function startLottery() {
-            var textArea = document.getElementById("nameList");
-            var names = textArea.value.split("\n").map(name => name.trim()).filter(name => name !== "");
+        function drawWinner() {
+            const textarea = document.getElementById("participants");
+            const result = document.getElementById("result");
+            let participants = textarea.value.split("\n").map(p => p.trim()).filter(p => p);
 
-            if (names.length < 2) {
-                alert("請至少輸入兩個參賽者！");
+            if (participants.length === 0) {
+                result.innerHTML = "😅 哎呀，還沒有人參加耶！";
                 return;
             }
 
-            var candidates = [names[0], names[1]]; // 只能從前兩行抽獎
-            var emoji = document.getElementById("emoji");
-            var result = document.getElementById("result");
-
-            // 顯示隨機 Emoji
-            emoji.style.display = "block";
-            var emojiList = ["🎉", "🎈", "🎊", "🤩"];
-            var animation = setInterval(() => {
-                emoji.textContent = emojiList[Math.floor(Math.random() * emojiList.length)];
-            }, 200);
-
-            // 6 秒後顯示結果
-            setTimeout(() => {
-                clearInterval(animation);
-                emoji.style.display = "none";
-                var winner = candidates[Math.floor(Math.random() * candidates.length)];
-                alert(`恭喜 ${winner} 中獎！`);
-                result.innerHTML = `🎉 恭喜 <strong>${winner}</strong>！`;
-            }, 6000);
+            // 隨機挑選幸運兒
+            const winner = participants[Math.floor(Math.random() * participants.length)];
+            result.innerHTML = `🎉 恭喜 <strong>${winner}</strong> 中獎啦！🥳`;
         }
 
-        function resetLottery() {
-            document.getElementById("nameList").value = "";
-            document.getElementById("result").innerHTML = "";
+        function reset() {
+            document.getElementById("participants").value = "";
+            document.getElementById("result").innerHTML = "🎁 誰會是下一個幸運兒？🎁";
         }
     </script>
-
 </body>
 </html>
