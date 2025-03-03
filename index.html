@@ -8,13 +8,13 @@
         body {
             text-align: center;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #e1bee7, #b2ebf2); /* 柔和歡樂漸層 */
+            background: linear-gradient(to right, #e1bee7, #b2ebf2);
             padding: 20px;
         }
         h1 {
             color: #7b1fa2;
             font-size: 36px;
-            text-shadow: 2px 2px #f06292; /* 輕微陰影增加趣味 */
+            text-shadow: 2px 2px #f06292;
         }
         textarea {
             width: 300px;
@@ -35,7 +35,7 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #f44336; /* 懸停時更有活力 */
+            background-color: #f44336;
         }
         #result {
             font-size: 24px;
@@ -46,8 +46,10 @@
 </head>
 <body>
     <h1>🎉 TC813 平板大樂透 🎉</h1>
-    <p>✨ 每行輸入一個參賽者，準備開抽！✨</p>
-    <textarea id="participants" placeholder="小明&#10;小紅&#10;小花"></textarea>
+    <p>✨ 每行輸入一個參賽者，只抽前二行喔！✨</p>
+    <textarea id="participants" placeholder="小明
+小紅
+小花"></textarea>
     <br>
     <button onclick="drawWinner()">🎊 抽獎！</button>
     <button onclick="reset()">🔄 重來一次</button>
@@ -64,15 +66,20 @@
                 return;
             }
 
-            // 隨機挑選幸運兒
-            const winner = participants[Math.floor(Math.random() * participants.length)];
-            result.innerHTML = `🎉 恭喜 <strong>${winner}</strong> 中獎啦！🥳`;
-        }
+            // 只取前二行非空參賽者
+            participants = participants.slice(0, 2);
 
-        function reset() {
-            document.getElementById("participants").value = "";
-            document.getElementById("result").innerHTML = "🎁 誰會是下一個幸運兒？🎁";
-        }
-    </script>
-</body>
-</html>
+            if (participants.length === 0) {
+                result.innerHTML = "😅 前二行沒人，快來參加吧！";
+                return;
+            }
+
+            // 抽獎前顯示等待動畫
+            result.innerHTML = "🎰 抽獎中...";
+            let countdown = 5; // 5秒倒數
+            const countdownInterval = setInterval(() => {
+                result.innerHTML = `🎰 抽獎中... ${countdown}秒 ✨`;
+                countdown--;
+                if (countdown < 0) {
+                    clearInterval(countdownInterval);
+                    // 隨機挑​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​​
