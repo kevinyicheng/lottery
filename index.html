@@ -1,124 +1,256 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎲 TC813 平板摸彩 🎲</title>
-    <style>
-        body {
-            text-align: center;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #b3e5fc, #d1c4e9); /* 柔和藍紫漸層 */
-            padding: 20px;
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.2); /* 半透明背景 */
-            backdrop-filter: blur(10px); /* 毛玻璃效果 */
-            -webkit-backdrop-filter: blur(10px); /* 兼容性 */
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        h1 {
-            color: #5e35b1;
-            font-size: 36px;
-            text-shadow: 2px 2px #9575cd; /* 輕微陰影 */
-            margin: 0;
-        }
-        p {
-            color: #673ab7;
-            font-size: 18px;
-        }
-        textarea {
-            width: 300px;
-            height: 150px;
-            border: 2px dashed #ff8a65;
-            border-radius: 8px;
-            padding: 10px;
-            font-size: 16px;
-            background: rgba(255, 255, 255, 0.5); /* 半透明輸入框 */
-            backdrop-filter: blur(5px);
-        }
-        button {
-            background-color: #ff7043;
-            color: white;
-            padding: 12px 25px;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            margin: 10px;
-            cursor: pointer;
-            transition: transform 0.2s; /* 按鈕動畫 */
-        }
-        button:hover {
-            background-color: #f4511e;
-            transform: scale(1.05); /* 懸停時放大 */
-        }
-        #result {
-            font-size: 24px;
-            color: #d81b60;
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>抽獎小工具</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans TC', sans-serif;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: #3d1c6b;
+      overflow: hidden;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.35);
+      backdrop-filter: blur(16px);
+      border-radius: 20px;
+      padding: 40px;
+      width: 90%;
+      max-width: 720px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      font-size: 48px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    p {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 220px;
+      font-size: 16px;
+      padding: 15px;
+      border: none;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.8);
+      color: #3d1c6b;
+      resize: vertical;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.1);
+    }
+    textarea:focus {
+      outline: none;
+      border: 2px solid #8e44ad;
+    }
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 28px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(to right, #a18cd1, #fbc2eb);
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    #countdown {
+      text-align: center;
+      font-size: 40px;
+      margin-top: 30px;
+      font-weight: bold;
+      color: #ff4081;
+    }
+    .countdown-number {
+      display: inline-block;
+      animation: pop 1s ease-in-out;
+    }
+    .emoji {
+      font-size: 36px;
+      animation: shake 0.6s infinite;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(10deg); }
+      50% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+    @keyframes pop {
+      0% { transform: scale(0.8); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .results {
+      margin-top: 35px;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 14px;
+      padding: 30px;
+      text-align: left;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+    }
+    .results h2 {
+      margin-top: 0;
+      font-size: 26px;
+      color: #6a1b9a;
+    }
+    .winner-group {
+      margin-bottom: 24px;
+    }
+    .group-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+    .winner {
+      font-size: 18px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+    /* Fireworks */
+    .fireworks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 2;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎉 TC813 平板摸彩 🎉</h1>
-        <p>✨ 每行輸入一個參賽者！✨</p>
-        <textarea id="participants" placeholder="小明
-小紅
-小花"></textarea>
-        <br>
-        <button onclick="drawWinner()">🎊 開始摸彩！</button>
-        <button onclick="reset()">🔄 重來一次</button>
-        <div id="result">🎁 誰會是幸運兒呢？🎁</div>
+  <canvas class="fireworks" id="fireworks"></canvas>
+  <div class="container">
+    <h1>抽獎小工具</h1>
+    <p>請在下方輸入抽獎名單，每行一個名字</p>
+    <textarea id="nameList" placeholder="例如：\n張一\n李二\n王三"></textarea>
+    <div class="btn-group">
+      <button onclick="drawLottery()">開始抽獎</button>
+      <button onclick="resetPage()">重置</button>
     </div>
-
-    <script>
-        function drawWinner() {
-            const textarea = document.getElementById("participants");
-            const result = document.getElementById("result");
-            let participants = textarea.value.split("\n").map(p => p.trim()).filter(p => p);
-
-            if (participants.length === 0) {
-                result.innerHTML = "😅 哎呀，還沒有人參加耶！";
-                return;
-            }
-
-            // 只取前二行非空參賽者
-            participants = participants.slice(0, 2);
-
-            if (participants.length === 0) {
-                result.innerHTML = "😅 快來參加吧！";
-                return;
-            }
-
-            // 抽獎前顯示等待動畫
-            result.innerHTML = "🎰 摸彩中...";
-            let countdown = 5; // 5秒倒數
-            const countdownInterval = setInterval(() => {
-                result.innerHTML = `🎰 摸彩中... ${countdown}秒 ✨`;
-                countdown--;
-                if (countdown < 0) {
-                    clearInterval(countdownInterval);
-                    // 隨機挑選前二行中的幸運兒
-                    const winner = participants[Math.floor(Math.random() * participants.length)];
-                    result.innerHTML = `🎉 恭喜 <strong>${winner}</strong> 中獎啦！🥳`;
-                }
-            }, 1000); // 每秒更新一次
+    <div id="countdown"></div>
+    <div id="results" class="results" style="display: none">
+      <h2>中獎名單</h2>
+      <div id="winnerList"></div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/fireworks-js@2/dist/fireworks.js"></script>
+  <script>
+    let hasDrawn = false;
+    let fireworks;
+    function drawLottery() {
+      if (hasDrawn) {
+        alert("已經抽過了，如需重新抽獎請按下重置");
+        return;
+      }
+      const input = document.getElementById("nameList").value.trim();
+      if (!input) {
+        alert("請輸入名單");
+        return;
+      }
+      const names = input.split(/\n|\r/).map(n => n.trim()).filter(n => n);
+      if (names.length < 40) {
+        alert("名單至少需要40人");
+        return;
+      }
+      let countdownNum = 5;
+      const countdownDiv = document.getElementById("countdown");
+      countdownDiv.innerHTML = `<span class='countdown-number'>${countdownNum}</span> <span class='emoji'>🎉</span>`;
+      const countdownInterval = setInterval(() => {
+        countdownNum--;
+        if (countdownNum > 0) {
+          countdownDiv.innerHTML = `<span class='countdown-number'>${countdownNum}</span> <span class='emoji'>🎉</span>`;
+        } else {
+          clearInterval(countdownInterval);
+          countdownDiv.innerText = "抽獎中...";
+          for (let i = names.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [names[i], names[j]] = [names[j], names[i]];
+          }
+          const winners = names.slice(0, 40);
+          const winnerListDiv = document.getElementById("winnerList");
+          let output = '';
+          for (let group = 0; group < 4; group++) {
+            const start = group * 10;
+            const groupWinners = winners.slice(start, start + 10);
+            output += `<div class="winner-group">
+              <div class="group-title">第 ${group + 1} 組</div>
+              <div class="winner">${groupWinners.map((name, index) => `${start + index + 1}. ${name}`).join('\n')}</div>
+            </div>`;
+          }
+          winnerListDiv.innerHTML = output;
+          document.getElementById("results").style.display = "block";
+          countdownDiv.innerText = "抽獎完成！";
+          showFireworks();
+          hasDrawn = true;
         }
-
-        function reset() {
-            document.getElementById("participants").value = "";
-            document.getElementById("result").innerHTML = "🎁 誰會是下一個幸運兒？🎁";
-        }
-    </script>
+      }, 1000);
+    }
+    function resetPage() {
+      location.reload();
+    }
+    function showFireworks() {
+      const container = document.getElementById("fireworks");
+      fireworks = new Fireworks.default(container, {
+        rocketsPoint: 50,
+        opacity: 0.8,
+        acceleration: 1.05,
+        friction: 0.95,
+        gravity: 1.5,
+        particles: 90,
+        trace: 3,
+        explosion: 5,
+        intensity: 30,
+        flickering: 50,
+        lineStyle: "round",
+        hue: {
+          min: 0,
+          max: 360
+        },
+        delay: {
+          min: 15,
+          max: 30
+        },
+        brightness: {
+          min: 50,
+          max: 80
+        },
+        decay: {
+          min: 0.015,
+          max: 0.03
+        },
+        mouse: { click: false, move: false, max: 0 }
+      });
+      fireworks.start();
+      setTimeout(() => fireworks.stop(), 6000);
+    }
+  </script>
 </body>
 </html>
